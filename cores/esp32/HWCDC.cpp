@@ -366,6 +366,19 @@ int HWCDC::read(void)
     return -1;
 }
 
+int HWCDC::read(uint32_t timeout_ms)
+{
+    if(rx_queue == NULL){
+        return -1;
+    }
+    uint8_t c = 0;
+
+    if(xQueueReceive(rx_queue, &c, timeout_ms / portTICK_PERIOD_MS)) {
+        return c;
+    }
+    return -1;
+}
+
 size_t HWCDC::read(uint8_t *buffer, size_t size)
 {
     if(rx_queue == NULL){
